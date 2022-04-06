@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>图像切割粘贴器 - 神奇海螺实验室</title>
+<meta name="viewport" content="width=device-width,user-scalable=0">
+<div class="app" :data-runing="runing">
+    <header>
+        <h1>图像切割粘贴器</h1>
+        <p>给图像切开再粘上</p>
+    </header>
+    <div class="output-box">
+        <img class="source-image" :src="src" ref="img" @load="generate()">
+        <img class="output-image" :src="output" v-if="output">
+    </div>
+
+    <div class="ctrl-box" v-if="config" v-cloak>
+        <div class="input-box">
+            <button @click="chooseFileAndSetImageSrc">选择或粘贴拖拽图片</button>
+            <button @click="save">保存图片</button>
+        </div>
+
+
+        <div class="input-box" style="padding:5px 0;">
+            <label>
+                <input type="radio" v-model="config.direction" value="horizontal">
+                横向
+            </label>
+            <label>
+                <input type="radio" v-model="config.direction" value="vertical">
+                纵向
+            </label>
+        </div>
+
+
+        <div class="input-box">
+            <h4>sliceXCount</h4>
+            <input type="range" min=2 max="24" step="1" v-model.number="config.sliceXMinCount">
+            {{config.sliceXMinCount}}
+        </div>
+        <div class="input-box">
+            <h4>sliceYCount</h4>
+            <input type="range" min=2 max="24" step="1" v-model.number="config.sliceYMinCount">
+            {{config.sliceYMinCount}}
+        </div>
+        <div class="input-box">
+            <h4>splitCount</h4>
+            <input type="range" min=2 max="12" step="1" v-model.number="config.splitCount">
+            {{config.splitCount}}
+        </div>
+
+
+        <pre>{{JSON.stringify(config,0,4)}}</pre>
+
+    </div>
+    <blockquote>
+        <h2>「电子包浆」 图片做旧工具，赛博包浆虚拟器🤢</h2>
+        <p>&nbsp;</p>
+        <p>支持 <b>图片绿化</b>、<b>虚拟水印</b>、<b>虚拟传播年份</b>、<b>高效率模糊</b>、<b>浮雕锐化</b>、<b>噪点颗粒</b>、<b>像素不对齐</b>、<b>作假多次包浆绿化</b> 和 基础 <b>对比度</b>、<b>亮度</b>调整 以及 <b>波普重复</b>功能😈</p>
+        <p>&nbsp;</p>
+        <p>水印用户名可自定义</p>
+        <p>
+            可选择原尺寸输出图片
+            <label v-if="config">
+                <input type="checkbox" v-model="config.preview">
+                缩略图
+                <small>关闭即输出原图</small>
+            </label>
+        </p>
+    </blockquote>
+    <div class="post-box">
+        <p>👻 无法正常选择图片请尝试使用自带浏览器！</p>
+    </div>
+    <footer>
+        <div class="copyright">
+            <br>
+            <a href="https://weibo.com/1197780522/Lmoup2eDs" target="_blank">转发到微博</a>
+            <br>
+            全做：<a href="https://weibo.com/reiove" target="_blank">@卜卜口</a>
+            <hr>
+            反馈：<a href="https://github.com/itorr/patina" target="_blank">GitHub</a>
+            <hr>
+            QQ群 <span>335766065</span>
+            <br>
+            <a href="https://lab.magiconch.com/">神奇海螺实验室</a>
+            <hr>
+            打赏：<a href="https://lab.magiconch.com/nbnhhsh/sponsor.png" target="_blank">二维码</a>
+        </div>
+    </footer>
+
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.6.11/vue.min.js"></script>
+<script src="image-split-join.js"></script>
+<script src="document.js"></script>
