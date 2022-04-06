@@ -75,7 +75,7 @@ const generate = (imageEl,config,callback)=>{
 		}
 	}else{
 		
-		ctx.drawImage(imageEl,0,0)
+		ctx.drawImage(imageEl,0,0,width,height)
 
 		let pixel = ctx.getImageData(0, 0, width, height);
 		let pixelData = pixel.data;
@@ -83,6 +83,10 @@ const generate = (imageEl,config,callback)=>{
 
 		let outputPixel = ctx.createImageData(width, height);
 		let outputPixelData = outputPixel.data;
+
+		//神奇数字
+		const fixNumA = 1001;
+		const fixNumB = 1000;
 
 		for(let hIndex = 0;hIndex<height;hIndex++){
 			for(let wIndex = 0;wIndex<width;wIndex++){
@@ -107,19 +111,30 @@ const generate = (imageEl,config,callback)=>{
 				// if(/\./.test(y))console.log(y)
 
 				// hIndex / height * sliceYMinCount 存在运算精度导致的抖动
-				const newSplitX = width  * splitX / splitCount + Math.floor(wIndex / width  * sliceXMinCount) * pixWidth;
-				const newSplitY = height * splitY / splitCount + Math.floor(hIndex / height * sliceYMinCount) * pixHeight;
+
+				const wScale = wIndex / width;
+				const hScale = hIndex / height;
+
+				const sliceSplitX = wScale * fixNumA * sliceXMinCount;
+				const sliceSplitY = hScale * fixNumA * sliceYMinCount;
+
+				const sliceSplitXFloor = Math.floor(sliceSplitX/fixNumB);
+				const sliceSplitYFloor = Math.floor(sliceSplitY/fixNumB);
+
+				const newSplitX = width  * splitX / splitCount + sliceSplitXFloor * pixWidth;
+				const newSplitY = height * splitY / splitCount + sliceSplitYFloor * pixHeight;
 
 
-				if(wIndex === 20)
-				if(hIndex === 310 ||hIndex === 311 || hIndex === 312 || hIndex === 313 || hIndex === 314 || hIndex === 315){
-					console.log(
-						hIndex,
-						newSplitY,
-						hIndex / height * sliceYMinCount,
-						Math.floor(hIndex / height * sliceYMinCount)
-					)
-				}
+				// if(wIndex === 20)
+				// if(hIndex === 310 ||hIndex === 311 || hIndex === 312 || hIndex === 313 || hIndex === 314 || hIndex === 315){
+				// 	console.log(
+				// 		hIndex,
+				// 		newSplitY,
+				// 		hScale,
+				// 		hScale * sliceYMinCount,
+				// 		Math.floor(hScale * sliceYMinCount)
+				// 	)
+				// }
 				//
 				const newW = newSplitX + splitXPix
 				const newH = newSplitY + splitYPix
