@@ -93,8 +93,9 @@ let defaultConfig = {
 	direction:'horizontal',
 	sliceXMinCount:22,
 	sliceYMinCount:23,
-	splitCount:3,
+	splitCount:2,
 	mode:'pixel', //draw pixel
+	quality:95,
 };
 let config = deepCopy(defaultConfig);
 
@@ -127,7 +128,7 @@ const app = new Vue({
 		save(){
 			const a = document.createElement('a');
 			a.href = this.output;
-			a.download = `[lab.magiconch.com][电子包浆]-${+Date.now()}.jpg`;
+			a.download = `[lab.magiconch.com][图像切割粘贴器]-${+Date.now()}.png`;
 			a.click();
 		}
 	},

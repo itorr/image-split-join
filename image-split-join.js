@@ -1,4 +1,8 @@
 
+//神奇数字
+const fixNumA = 10001;
+const fixNumB = 10000;
+
 
 
 
@@ -6,7 +10,10 @@
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d')
 
-document.body.appendChild(canvas)
+const canvasOutput = document.createElement('canvas');
+const ctxOutput = canvasOutput.getContext('2d')
+
+// document.body.appendChild(canvas)
 
 const generate = (imageEl,config,callback)=>{
     const naturalWidth = imageEl.naturalWidth
@@ -16,18 +23,21 @@ const generate = (imageEl,config,callback)=>{
 	let height = naturalHeight
 
 
-	console.log(naturalWidth,naturalHeight)
+	// console.log(naturalWidth,naturalHeight)
 	let { 
 		direction ,
 		sliceXMinCount ,
 		sliceYMinCount , 
 		splitCount ,
-		mode
+		mode,
+		quality
 	} = config
 
+	sliceYMinCount = sliceXMinCount;
 
 	let sliceXCount = sliceXMinCount * splitCount;
 	let sliceYCount = sliceYMinCount * splitCount;
+
 
 
 	if(direction === 'horizontal'){
@@ -37,21 +47,15 @@ const generate = (imageEl,config,callback)=>{
 		 
 	}
 
-	let pixWidth = Math.floor(width / sliceXCount)
-	let pixHeight = Math.floor(height / sliceYCount)
-
-	console.log(pixWidth,pixHeight,sliceXCount,sliceYCount)
-
-	width = sliceXCount * pixWidth
-	height = sliceYCount * pixHeight
-
-	console.log(width,height)
-
-	canvas.width = width
-	canvas.height = height
 
 	if( mode === 'draw' ){
-			
+		
+		let pixWidth  = width  / sliceXCount
+		let pixHeight = height / sliceYCount
+
+		canvas.width = width
+		canvas.height = height
+
 		for(let sliceXindex = 0;sliceXindex < sliceXCount;sliceXindex++){
 			for(let sliceYindex = 0;sliceYindex < sliceYCount;sliceYindex++){
 
@@ -73,7 +77,23 @@ const generate = (imageEl,config,callback)=>{
 				ctx.drawImage(imageEl,sx,sy,sw,sh,x,y,w,h);
 			}
 		}
+		return canvas.toDataURL('image/png',quality)
 	}else{
+
+		let pixWidth = Math.ceil(width / sliceXCount)
+		let pixHeight = Math.ceil(height / sliceYCount)
+
+		pixWidth = Math.max(pixWidth,1)
+		pixHeight = Math.max(pixHeight,1)
+
+		width = sliceXCount * pixWidth
+		height = sliceYCount * pixHeight
+
+		// console.log(pixWidth,pixHeight,sliceXCount,sliceYCount)
+		// console.log(width,height)
+
+		canvas.width = width
+		canvas.height = height
 		
 		ctx.drawImage(imageEl,0,0,width,height)
 
@@ -83,10 +103,6 @@ const generate = (imageEl,config,callback)=>{
 
 		let outputPixel = ctx.createImageData(width, height);
 		let outputPixelData = outputPixel.data;
-
-		//神奇数字
-		const fixNumA = 1001;
-		const fixNumB = 1000;
 
 		for(let hIndex = 0;hIndex<height;hIndex++){
 			for(let wIndex = 0;wIndex<width;wIndex++){
@@ -151,8 +167,16 @@ const generate = (imageEl,config,callback)=>{
 			}
 		}
 		ctx.putImageData(outputPixel, 0, 0);
+
+		// return canvas.toDataURL('image/jpeg',80)
+
+
+		canvasOutput.width = naturalWidth;
+		canvasOutput.height = naturalHeight;
+		ctxOutput.drawImage(canvas,0,0,naturalWidth,naturalHeight)
+		return canvasOutput.toDataURL('image/png',quality)
 	}
 
-	return canvas.toDataURL('image/jpeg',80)
+	
 
 }
