@@ -91,16 +91,16 @@ const deepCopy = o=>JSON.parse(JSON.stringify(o));
 
 let defaultConfig = {
 	direction:'horizontal',
-	sliceXMinCount:22,
-	sliceYMinCount:23,
-	splitCount:2,
+	sliceXMinCount:12,
+	sliceYMinCount:12,
+	splitCount:3,
 	mode:'pixel', //draw pixel
 	quality:95,
 };
 let config = deepCopy(defaultConfig);
 
 const data = {
-	src:'totoro-avatar.jpg',
+	src:'kumiko-ha.jpg',
 	output:null,
 	runing:false,
 	config
